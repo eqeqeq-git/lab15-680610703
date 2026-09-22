@@ -13,17 +13,26 @@ export default function RootLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-14 items-center justify-between gap-2 border-b px-4">
+      <SidebarInset className="bg-background">
+        <header className="flex h-16 items-center justify-between gap-2 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
             <Separator orientation="vertical" className="h-4" />
-            <span className="text-sm font-medium">ระบบลงทะเบียนเรียน</span>
+            <span className="text-sm font-semibold tracking-wide text-foreground">
+              ระบบลงทะเบียนเรียน
+            </span>
           </div>
           <ModeToggle />
         </header>
-        <main className="flex-1 p-4">
-          <Outlet />
+
+        <main className="flex flex-1 flex-col">
+          <div className="flex-1">
+            <Outlet />
+          </div>
+
+          <footer className="border-t bg-background px-3 py-2 text-center text-[10px] text-muted-foreground sm:text-xs">
+            จัดทำโดย Pakin Wataek รหัสนักศึกษา 680610703
+          </footer>
         </main>
       </SidebarInset>
     </SidebarProvider>

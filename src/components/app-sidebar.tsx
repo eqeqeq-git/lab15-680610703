@@ -1,5 +1,5 @@
-import { BookOpen, Calendar, Home, Settings } from "lucide-react";
-import { Link, useLocation } from "react-router";
+import { Home, NotebookPen } from "lucide-react";
+import { NavLink } from "react-router";
 
 import {
   Sidebar,
@@ -12,43 +12,75 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-const items = [
-  { title: "หน้าแรก", url: "/", icon: Home },
-  { title: "ลงทะเบียนเรียน", url: "/enrollment", icon: BookOpen },
-  { title: "ตารางเรียน", url: "/schedule", icon: Calendar },
-  { title: "ตั้งค่า", url: "/settings", icon: Settings },
-];
+import { currentUser } from "@/lib/mock-data";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 export function AppSidebar() {
-  const location = useLocation();
+  const navItems = [
+    { title: "หน้าแรก", to: "/", icon: Home },
+    { title: "ลงทะเบียนเรียน", to: "/enrollment", icon: NotebookPen },
+  ];
 
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <div className="px-2 py-1 text-sm font-semibold">CPE & ISNE</div>
+    <Sidebar className="border-r bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <SidebarHeader className="px-4 py-5">
+        <div className="flex items-center">
+          <p className="text-sm font-semibold tracking-wide text-slate-900 dark:text-slate-100">
+            CPE & ISNE
+          </p>
+        </div>
       </SidebarHeader>
-      <SidebarContent>
+
+      <SidebarContent className="px-2 py-3">
         <SidebarGroup>
-          <SidebarGroupLabel>เมนูหลัก</SidebarGroupLabel>
+          <SidebarGroupLabel className="px-2 text-[11px] uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+            เมนูหลัก
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  {/* ✅ แก้ไข: Base UI ใช้ `render={<Link />}` แทน `asChild` */}
-                  <SidebarMenuButton
-                    isActive={location.pathname === item.url}
-                    render={<Link to={item.url} />}
-                  >
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
+              {navItems.map(({ title, to, icon: Icon }) => (
+                <SidebarMenuItem key={to}>
+                  <NavLink to={to} end={to === "/"}>
+                    {({ isActive }) => (
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        className="w-full justify-start rounded-md px-2 py-2 text-sm text-slate-700 hover:bg-slate-200 data-[active=true]:bg-slate-200 data-[active=true]:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:data-[active=true]:bg-slate-800 dark:data-[active=true]:text-white"
+                        tooltip={title}
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span>{title}</span>
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <div className="mt-auto px-3 pb-4">
+        <Separator className="mb-3 bg-slate-200 dark:bg-slate-800" />
+        <div className="flex items-center gap-3">
+          <Avatar className="h-9 w-9 border border-slate-200 dark:border-slate-700">
+            <AvatarImage src={currentUser.avatar} alt={currentUser.nickname} />
+            <AvatarFallback className="bg-slate-200 text-[10px] text-slate-800 dark:bg-slate-700 dark:text-slate-100">
+              {currentUser.nickname.slice(0, 2)}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="min-w-0 flex flex-col">
+            <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
+              {currentUser.nickname}
+            </p>
+            <Badge className="mt-0.5 w-fit border-0 bg-transparent px-0 text-[10px] font-medium text-slate-500 dark:text-slate-400">
+              {currentUser.role}
+            </Badge>
+          </div>
+        </div>
+      </div>
     </Sidebar>
   );
 }
