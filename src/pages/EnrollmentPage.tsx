@@ -10,20 +10,15 @@ import { CourseCard } from "@/components/course-card";
 import { RegisterDialog } from "@/components/register-dialog";
 
 export default function EnrollmentPage() {
-  // ✅ แก้ไข 1: เปลี่ยนชื่อ function จาก Enrollent → EnrollmentPage
-
-  // ✅ แก้ไข 2: เพิ่ม state สำหรับ enrollments
   const [enrollments, setEnrollments] =
     useState<Enrollment[]>(initialEnrollments);
 
   const student = currentStudent;
 
-  // ✅ แก้ไข 3: คำนวณ enrolled course IDs
   const enrolledCourseIds = enrollments
     .filter((e) => e.studentId === CURRENT_STUDENT_ID)
     .map((e) => e.courseId);
 
-  // ✅ แก้ไข 4: สร้าง handler สำหรับเพิ่ม enrollment
   const handleAddEnrollment = (courseId: string, enrolledAt: string) => {
     const newEnrollment: Enrollment = {
       studentId: CURRENT_STUDENT_ID,
@@ -33,7 +28,6 @@ export default function EnrollmentPage() {
     setEnrollments([...enrollments, newEnrollment]);
   };
 
-  // ✅ แก้ไข 5: สร้าง handler สำหรับลบ enrollment
   const handleRemoveEnrollment = (courseId: string) => {
     setEnrollments(
       enrollments.filter(
